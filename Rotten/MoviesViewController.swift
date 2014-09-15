@@ -41,6 +41,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.posterView.setImageWithURL(NSURL (string: posterUrl))
         return cell
     }
+    //func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    //    let movieDetailViewController = detailViewController(nibName: nil, bundle: nil)
+    //}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -48,14 +51,46 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+    override func prepareForSegue(segue: (UIStoryboardSegue!), sender: AnyObject!) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if (segue.identifier == "detail") {
+            let detVc = segue.destinationViewController as detailViewController
+            // pass data to next view
+            let indexPath = self.tableView.indexPathForSelectedRow()?.row
+            var movie = Movies[indexPath!]
+            var ratings = movie["ratings"] as NSDictionary
+            var posters = movie["posters"] as NSDictionary
+            
+            var movieTitle = movie["title"] as NSString
+            var movieYear  = movie["year"] as NSInteger
+            var criticsScore = ratings["critics_score"] as NSInteger
+            var audianceScore = ratings["audience_score"] as NSInteger
+            var synopsis = movie["synopsis"] as String
+            var posterUrl = posters["thumbnail"] as String
+            var detailImageUrl = posterUrl.stringByReplacingOccurrencesOfString("tmb", withString: "ori")
+            
+            println("\(movieTitle) \(movieYear)")
+            println(detailImageUrl)
+            detVc.titleText = movieTitle
+            detVc.detImgUrlString = detailImageUrl
+            detVc.posterImgUrlString = posterUrl
+            detVc.titleYear = String(movieYear)
+            detVc.criticsScore = criticsScore
+            detVc.audianceScore = audianceScore
+            detVc.detDescString = synopsis
+        
+            //println(movie["synopsis"])
+            
+            
+            
+            
+        }
     }
-    */
+    
 
 }

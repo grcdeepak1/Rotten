@@ -14,6 +14,7 @@
 		00773BC119C28483008BE6F1 /* RottenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00773BC019C28483008BE6F1 /* RottenTests.swift */; };
 		00773BCB19C28687008BE6F1 /* MoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00773BCA19C28687008BE6F1 /* MoviesViewController.swift */; };
 		00773BCD19C293B0008BE6F1 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00773BCC19C293B0008BE6F1 /* MovieCell.swift */; };
+		00B8D5FA19C74E16009FEB8B /* detailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B8D5F919C74E16009FEB8B /* detailViewController.swift */; };
 		61EC65E258B448699F0B1342 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2598666A8A044B5F99741C51 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		00773BCA19C28687008BE6F1 /* MoviesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesViewController.swift; sourceTree = "<group>"; };
 		00773BCC19C293B0008BE6F1 /* MovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
 		00773BCE19C2AA0C008BE6F1 /* Rotten-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Rotten-Bridging-Header.h"; sourceTree = "<group>"; };
+		00B8D5F919C74E16009FEB8B /* detailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = detailViewController.swift; sourceTree = "<group>"; };
 		1587C90BF531440793C42295 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		2598666A8A044B5F99741C51 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -86,6 +88,7 @@
 		00773BA719C28482008BE6F1 /* Rotten */ = {
 			isa = PBXGroup;
 			children = (
+				00B8D5F919C74E16009FEB8B /* detailViewController.swift */,
 				00773BCC19C293B0008BE6F1 /* MovieCell.swift */,
 				00773BCA19C28687008BE6F1 /* MoviesViewController.swift */,
 				00773BAA19C28483008BE6F1 /* AppDelegate.swift */,
@@ -269,6 +272,7 @@
 				00773BAB19C28483008BE6F1 /* AppDelegate.swift in Sources */,
 				00773BCB19C28687008BE6F1 /* MoviesViewController.swift in Sources */,
 				00773BCD19C293B0008BE6F1 /* MovieCell.swift in Sources */,
+				00B8D5FA19C74E16009FEB8B /* detailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +349,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
