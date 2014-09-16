@@ -12,20 +12,28 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     @IBOutlet weak var tableView: UITableView!
     var Movies: [NSDictionary] = []
+    var refreshControl:UIRefreshControl!
+    var rentalUrl = "http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=c9tx6uu8mgyav5gc54t4q933";
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         
-        var url = "http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=c9tx6uu8mgyav5gc54t4q933";
-        var request = NSURLRequest(URL: NSURL(string: url))
+        self.tableView.backgroundColor = UIColor.blackColor()
+        self.tableView.tintColor = UIColor.whiteColor()
+        self.tableView.separatorColor = UIColor.darkGrayColor()
+        
+        var request = NSURLRequest(URL: NSURL(string: rentalUrl))
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             var object = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
             self.Movies = object["movies"] as [NSDictionary]
             self.tableView.reloadData()
         }
-        
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refersh")
+        self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        self.tableView.addSubview(refreshControl)
         // Do any additional setup after loading the view.
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -41,16 +49,24 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.posterView.setImageWithURL(NSURL (string: posterUrl))
         return cell
     }
-    //func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    //    let movieDetailViewController = detailViewController(nibName: nil, bundle: nil)
-    //}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    func refresh(refreshControl : UIRefreshControl)
+    {
+        // Code to refresh table view
+        var request = NSURLRequest(URL: NSURL(string: rentalUrl))
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            var object = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
+            self.Movies = object["movies"] as [NSDictionary]
+            self.tableView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
 
+    }
     
     // MARK: - Navigation
 
@@ -74,8 +90,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             var posterUrl = posters["thumbnail"] as String
             var detailImageUrl = posterUrl.stringByReplacingOccurrencesOfString("tmb", withString: "ori")
             
-            println("\(movieTitle) \(movieYear)")
-            println(detailImageUrl)
             detVc.titleText = movieTitle
             detVc.detImgUrlString = detailImageUrl
             detVc.posterImgUrlString = posterUrl
@@ -83,12 +97,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             detVc.criticsScore = criticsScore
             detVc.audianceScore = audianceScore
             detVc.detDescString = synopsis
-        
-            //println(movie["synopsis"])
-            
-            
-            
-            
+            detVc.navigationItem.title = movieTitle
         }
     }
     

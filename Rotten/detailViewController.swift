@@ -8,7 +8,7 @@
 
 import UIKit
 
-class detailViewController: UIViewController {
+class detailViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var scoreLabel: UILabel!
@@ -22,27 +22,42 @@ class detailViewController: UIViewController {
     
     @IBOutlet var detDescLabel: UILabel!
     @IBOutlet var detailImageView: UIImageView!
+
+    @IBOutlet var descScrollView: UIScrollView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do  any additional setup after loading the view
+        
         titleLabel.text = titleText+" ("+titleYear+")"
         self.detailImageView.setImageWithURL(NSURL (string: self.posterImgUrlString))
-        self.scoreLabel.text = "Critic's Score: "+String(criticsScore)+"\tAudiance score : "+String(audianceScore)
+        self.scoreLabel.text = "Critic's Score: "+String(criticsScore)+"\t\tAudiance score : "+String(audianceScore)
         self.detDescLabel.text = detDescString
-        
+        //var textSize = self.detDescLabel.sizeThatFits(CGSizeMake(320, 500))
+        //detDescLabel.frame.size = textSize
+        descScrollView.contentSize = CGSize(width: 320, height: 1000)
         var request = NSURLRequest(URL: NSURL(string: detImgUrlString))
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if(error == nil) {
                 self.detailImageView.setImageWithURL(NSURL (string: self.detImgUrlString))
             }
         }
+        
     }
 
+
+    override func viewDidAppear(animated: Bool) {
+
+            
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        println("Tap Recongnised")
+    }
+
     
 
     /*
