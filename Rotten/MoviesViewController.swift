@@ -14,7 +14,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var Movies: [NSDictionary] = []
     var refreshControl:UIRefreshControl!
     var rentalUrl = "http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=c9tx6uu8mgyav5gc54t4q933";
-    
+    var searchUrl = "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=c9tx6uu8mgyav5gc54t4q933&q="
+    @IBOutlet var searchBar: UISearchBar!
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -24,6 +25,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.tintColor = UIColor.whiteColor()
         self.tableView.separatorColor = UIColor.darkGrayColor()
         
+        if(searchBar.text != nil) {
+            var searchText = searchBar.text
+            var newUrl = searchUrl+searchText
+            println(newUrl);
+        }
         var request = NSURLRequest(URL: NSURL(string: rentalUrl))
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             var object = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
@@ -57,6 +63,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func refresh(refreshControl : UIRefreshControl)
     {
+        var progHud: MBProgressHUD = MBProgressHUD()
+        progHud.labelText = "Loading Movies..."
+        progHud.center = self.view.center
+        progHud.labelColor = UIColor.redColor();
+        progHud.center = self.view.center
+        progHud.show(true)
+        
         // Code to refresh table view
         var request = NSURLRequest(URL: NSURL(string: rentalUrl))
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
@@ -65,13 +78,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             self.tableView.reloadData()
             self.refreshControl.endRefreshing()
         }
+        progHud.hide(true)
 
     }
-    
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: (UIStoryboardSegue!), sender: AnyObject!) {
+        self.view.endEditing(true)
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if (segue.identifier == "detail") {
