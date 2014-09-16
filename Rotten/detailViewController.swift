@@ -23,6 +23,7 @@ class detailViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var detDescLabel: UILabel!
     @IBOutlet var detailImageView: UIImageView!
 
+    @IBOutlet var contentView: UIView!
     @IBOutlet var descScrollView: UIScrollView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,9 +33,13 @@ class detailViewController: UIViewController, UIGestureRecognizerDelegate {
         self.detailImageView.setImageWithURL(NSURL (string: self.posterImgUrlString))
         self.scoreLabel.text = "Critic's Score: "+String(criticsScore)+"\t\tAudiance score : "+String(audianceScore)
         self.detDescLabel.text = detDescString
-        //var textSize = self.detDescLabel.sizeThatFits(CGSizeMake(320, 500))
-        //detDescLabel.frame.size = textSize
-        descScrollView.contentSize = CGSize(width: 320, height: 1000)
+        detDescLabel.sizeToFit()
+        descScrollView.contentSize.height   = 320 + contentView.frame.size.height
+        descScrollView.contentSize.width = 320
+        contentView.addSubview(detDescLabel)
+        descScrollView.addSubview(contentView)
+        
+        //descScrollView.contentSize = CGSize(width: 320, height: 1000)
         var request = NSURLRequest(URL: NSURL(string: detImgUrlString))
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if(error == nil) {

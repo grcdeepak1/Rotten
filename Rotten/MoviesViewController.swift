@@ -16,10 +16,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var rentalUrl = "http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=c9tx6uu8mgyav5gc54t4q933";
     var searchUrl = "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=c9tx6uu8mgyav5gc54t4q933&q="
     @IBOutlet var searchBar: UISearchBar!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        var hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.labelText = "loading .."
+        hud.show(true)
         
         self.tableView.backgroundColor = UIColor.blackColor()
         self.tableView.tintColor = UIColor.whiteColor()
@@ -35,6 +39,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             var object = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
             self.Movies = object["movies"] as [NSDictionary]
             self.tableView.reloadData()
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         }
         self.refreshControl = UIRefreshControl()
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refersh")
@@ -63,12 +68,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func refresh(refreshControl : UIRefreshControl)
     {
-        var progHud: MBProgressHUD = MBProgressHUD()
-        progHud.labelText = "Loading Movies..."
-        progHud.center = self.view.center
-        progHud.labelColor = UIColor.redColor();
-        progHud.center = self.view.center
-        progHud.show(true)
+        var hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.labelText = "loading .."
+        hud.show(true)
         
         // Code to refresh table view
         var request = NSURLRequest(URL: NSURL(string: rentalUrl))
@@ -78,7 +80,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             self.tableView.reloadData()
             self.refreshControl.endRefreshing()
         }
-        progHud.hide(true)
+        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
 
     }
 

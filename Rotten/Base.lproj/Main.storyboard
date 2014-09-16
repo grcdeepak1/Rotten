@@ -122,6 +122,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="sdG-ua-6LR"/>
                     <connections>
+                        <outlet property="contentView" destination="H3N-qf-kUH" id="FxK-kq-lzV"/>
                         <outlet property="descScrollView" destination="hQg-tQ-I0H" id="kDO-Fz-xcv"/>
                         <outlet property="detDescLabel" destination="9fN-bS-buA" id="qB8-QM-jSr"/>
                         <outlet property="detailImageView" destination="DxT-PC-qkg" id="aZo-lh-X8j"/>
