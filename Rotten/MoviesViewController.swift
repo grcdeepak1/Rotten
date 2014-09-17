@@ -14,9 +14,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var Movies: [NSDictionary] = []
     var refreshControl:UIRefreshControl!
     var rentalUrl = "http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=c9tx6uu8mgyav5gc54t4q933";
+    var boxOfficeUrl="http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=c9tx6uu8mgyav5gc54t4q933"
     var searchUrl = "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=c9tx6uu8mgyav5gc54t4q933&q="
     @IBOutlet var searchBar: UISearchBar!
-
+    @IBOutlet var networkErrorLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -29,13 +31,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.tintColor = UIColor.whiteColor()
         self.tableView.separatorColor = UIColor.darkGrayColor()
         
-        if(searchBar.text != nil) {
-            var searchText = searchBar.text
-            var newUrl = searchUrl+searchText
-            println(newUrl);
-        }
-        var request = NSURLRequest(URL: NSURL(string: rentalUrl))
+
+        var request = NSURLRequest(URL: NSURL(string: boxOfficeUrl))
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            if((error) != nil) {
+                self.searchBar.hidden = true
+                self.networkErrorLabel.hidden = false
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                return
+            } else {
+                self.searchBar.hidden = false
+                self.networkErrorLabel.hidden = true
+            }
             var object = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
             self.Movies = object["movies"] as [NSDictionary]
             self.tableView.reloadData()
@@ -60,6 +67,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.posterView.setImageWithURL(NSURL (string: posterUrl))
         return cell
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -73,8 +81,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         hud.show(true)
         
         // Code to refresh table view
-        var request = NSURLRequest(URL: NSURL(string: rentalUrl))
+        var request = NSURLRequest(URL: NSURL(string: boxOfficeUrl))
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            if((error) != nil) {
+                self.searchBar.hidden = true
+                self.networkErrorLabel.hidden = false
+                self.refreshControl.endRefreshing()
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                return
+            } else {
+                self.searchBar.hidden = false
+                self.networkErrorLabel.hidden = true
+            }
             var object = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
             self.Movies = object["movies"] as [NSDictionary]
             self.tableView.reloadData()
